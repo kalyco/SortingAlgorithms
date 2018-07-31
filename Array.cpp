@@ -72,7 +72,7 @@ void Array::output(std::ostream & s) const
 const int & Array::operator[](int i) const
 {
   if (i < 0 || i >= mLen) {
-    std::cout << "Invalid array index." << std::endl;
+    std::cout << "Invalid array index: " << i << std::endl;
     exit(1);
   }
   return mA[i];
@@ -81,7 +81,7 @@ const int & Array::operator[](int i) const
 int & Array::operator[](int i)
 {
   if (i < 0 || i >= mLen) {
-    std::cout << "Invalid array index." << std::endl;
+    std::cout << "Invalid array index." << i << std::endl;
     exit(1);
   }
   return mA[i];
