@@ -13,7 +13,7 @@ class QuickSort : public SortingAlgorithm {
  
  public:
   void swap(Array & A, int f, int s) {
-    int t = f;
+    int t = A[f];
     A[f] = A[s];
     A[s] = t;
   }
@@ -23,39 +23,46 @@ class QuickSort : public SortingAlgorithm {
     int second = A.length() / 2;
     int third = A.length() - 1;
     if (A[first] >= A[second] && A[first] >= A[third]) { // first is highest
-      return (A[second] >= A[third] ? second : third); // return 2nd highest
+      return (A[second] >= A[third] ? A[second] : A[third]); // return 2nd highest
     } else { // Another is higher
       if (A[second] <= A[third]) { // find next highest
-        return (A[second] >= A[first] ? second : first); // return the higher value
+        return (A[second] >= A[first] ? A[second] : A[first]); // return the higher value
       } else {
-        return (A[third] >= A[first] ? third : first); // return 2nd lowest 
+        return (A[third] >= A[first] ? A[third] : A[first]); // return 2nd lowest 
       }
     }
-  }  
+  } 
+
+  virtual void sort(Array& A) {
+    quickSort(A, 0, A.length() - 1);
+  }
 
   int partition(Array & A, int low, int high) {
-    int pivot = getMedianOfThree(A);
-    int i = low - 1; // Index of smaller element
-
-    for (int j = low; j <= high - 1; j++) {
-      if (A[j] <= pivot) {
-        i++; // increment index of smaller element
-        swap(A, i, j);
+    int pi = low + (rand() % (high - low + 1));  // 1: Select pivot
+    int pivot = A[pi]; // reference value
+    A[pi] = A[high]; // 2: Swap pivot and high
+    A[high] = pivot;
+    int li = (low - 1);
+    int hi = high;
+    do {
+      do {li++;} while (A[li] < pivot); // increment low index while it's value <= pivot
+      do {hi--;} while (A[hi] > pivot && hi > low); // decrement high while its value > pivot
+      if (li < hi) { 
+        int tempHi = A[hi]; // swap the values
+        A[hi] = A[li];
+        A[li] = tempHi;
       }
-    }
-    swap(A, i + 1, high);
-    return i + 1;
+    } while (li < hi);
+    A[high] = A[li]; // set pivot back to middle and return
+    A[li] = pivot;
+    return li;
   }
 
   void quickSort(Array & A, int low, int high) {
     if (low >= high) return; // base case
-    int pi = partition(A, low, high); // partitioning index
-    quickSort(A, low, pi - 1);
-    quickSort(A, pi + 1, high);    
-  }
-
-  virtual void sort(Array& A) {
-    quickSort(A, 0, A.length() - 1);
+    int x = partition(A, low, high);
+    quickSort(A, low, x - 1);
+    quickSort(A, x + 1, high);
   }
 };
 
